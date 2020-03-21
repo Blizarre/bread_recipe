@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Calculateur Pain</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css"/>
+    <script src="jquery-3.4.1.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <form>
+        <h1>Calculateur pour pain</h1>
+
+
+        <h2>Parametres</h2>
+        <div class="form-group container">
+            <label for="farine" class="row col-form-label">Poids de farine (g)</label>
+            <input class="row form-control" label="farine" type="text" id="farine" value="500"/>
+
+            <label for="th" class="row col-form-label">Taux d'hydratation (%)</label>
+            <div class="row">
+                <input class="form-control" label="th" type="text" id="th" value="60"/>
+                <small class="form-text text-muted">Depend de la quantite de gluten et du taux de cendre. 70 est
+                    eleve
+                    (farine a 13.7% de gluten par exemple), 50 bas.</small>
+            </div>
+
+            <label for="ts" class="row col-form-label">Proportion de sel (%)</label>
+            <div class="row">
+                <input class="form-control" label="ts" type="text" id="ts" value="2.0"/>
+                <small class="form-text text-muted">2% est normal, 1.8 serait plus sain.</small>
+            </div>
+
+            <label for="tl" class="row col-form-label">Proportion de levure seche (%)</label>
+            <div class="row">
+                <input class="form-control" label="tl" type="text" id="tl" value="0.72"/>
+                <small class="form-text text-muted">En general 1.8% de levure fraiche. Pour passer a la levure seche
+                    on divise par 2.5, soit une valeur de 0.72%</small>
+            </div>
+        </div>
+
+
+        <h2>Total des ingredients</h2>
+        <div class="form-group container">
+            <label for="eau" class="row col-form-label">Poids d'eau (g)</label>
+            <input class="row form-control" label="eau" type="text" id="eau" readonly/>
+
+            <label for="levure" class="row col-form-label">Poids de levure seche (g)</label>
+            <input class="row form-control" label="levure" type="text" id="levure" readonly/>
+
+            <label for="sel" class="row col-form-label">Poids de sel (g)</label>
+            <input class="row form-control" label="sel" type="text" id="sel" readonly/>
+        </div>
+
+
+        <h2>Poolish</h2>
+        <div class="form-group container">
+            <label for="poolish_farine" class="row col-form-label">Poids de farine (g)</label>
+            <input class="row form-control" label="poolish_farine" type="text" id="poolish_farine" readonly/>
+
+            <label for="poolish_eau" class="row col-form-label">Poids d'eau (g)</label>
+            <input class="row form-control" label="poolish_eau" type="text" id="poolish_eau" readonly/>
+
+            <label for="levure" class="row col-form-label">Poids de levure seche (g)</label>
+            <input class="row form-control" label="poolish_levure" type="text" id="poolish_levure" readonly/>
+        </div>
+
+        <h2>Reste de la pate</h2>
+        <div class="form-group container">
+            <label for="reste_farine" class="row col-form-label">Poids de farine (g)</label>
+            <input class="row form-control" label="reste_farine" type="text" id="reste_farine" readonly/>
+
+            <label for="reste_eau" class="row col-form-label">Poids d'eau (g)</label>
+            <input class="row form-control" label="reste_eau" type="text" id="reste_eau" readonly/>
+
+            <label for="reste_levure" class="row col-form-label">Poids de levure seche (g)</label>
+            <input class="row form-control" label="reste_levure" type="text" id="reste_levure" readonly/>
+
+            <label for="reste_sel" class="row col-form-label">Poids de sel (g)</label>
+            <input class="row form-control" label="reste_sel" type="text" id="reste_sel" readonly/>
+        </div>
+    </form>
+</div>
+<script src="calculator.js"></script>
+</body>
+</html>

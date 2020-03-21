@@ -1,4 +1,4 @@
-# bread_calculator
+# Bread Calculator
 
 Bread recipe generator (French)
 

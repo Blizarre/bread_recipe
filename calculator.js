@@ -24,10 +24,10 @@ function update() {
         (read(th) * read(farine) / 100).toFixed(0)
     )
     sel.val(
-        (read(ts) * read(farine) / 100).toFixed(0)
+        (read(ts) * read(farine) / 100).toFixed(1)
     )
     levure.val(
-        (read(tl) * read(farine) / 100).toFixed(0)
+        (read(tl) * read(farine) / 100).toFixed(1)
     )
 
     poolish_farine.val(

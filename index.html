@@ -1,79 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <title>Calculateur Pain</title>
-    <link rel="stylesheet" type="text/css" href="bootstrap.min.css"/>
-    <script src="jquery-3.4.1.min.js"></script>
-    <script src="bootstrap.min.js"></script>
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" rel="stylesheet">
 </head>
 <body>
 <div class="container">
+
     <h1>Calculateur pour pain</h1>
-    <button type="button" class="btn btn-outline-primary my-3 d-print-none" onclick="window.print();return false;">Imprimer</button>
+
+    <button class="btn btn-outline-primary my-3 d-print-none" onclick="window.print();return false;" type="button">
+        Imprimer
+    </button>
+
+    <h2>Parametres</h2>
     <form>
-        <h2>Parametres</h2>
-        <div class="form-group container">
-            <label for="farine" class="row col-form-label">Poids de farine (g)</label>
-            <input class="row form-control" label="farine" type="text" id="farine" value="500"/>
+        <div class="form-group">
+            <label for="farine">Poids de farine (g)</label>
+            <input class="form-control" id="farine" step="10" type="number" value="500"/>
+        </div>
 
-            <label for="th" class="row col-form-label">Taux d'hydratation (%)</label>
-            <input class="row form-control" label="th" type="text" id="th" value="60"/>
-            <small class="row form-text text-muted">Depend de la quantite de gluten et du taux de cendre. 70 est
+        <div class="form-group">
+            <label for="th">Taux d'hydratation (%)</label>
+            <input class="form-control" id="th" step="1" type="number" value="60"/>
+            <small class="form-text text-muted">Depend de la quantite de gluten et du taux de cendre. 70 est
                 eleve (farine a 13.7% de gluten par exemple), 50 bas.</small>
-
-            <label for="ts" class="row col-form-label">Proportion de sel (%)</label>
-            <input class="row form-control" label="ts" type="text" id="ts" value="2.0"/>
-            <small class="row form-text text-muted">2% est normal, 1.8 serait plus sain.</small>
-
-            <label for="tl" class="row col-form-label">Proportion de levure seche (%)</label>
-            <input class="row form-control" label="tl" type="text" id="tl" value="0.72"/>
-            <small class="row form-text text-muted">En general 1.8% de levure fraiche. Pour passer a la levure seche
-                on divise par 2.5, soit une valeur de 0.72%</small>
         </div>
 
-
-        <h2>Total des ingredients</h2>
-        <div class="form-group container">
-            <label for="eau" class="row col-form-label">Poids d'eau (g)</label>
-            <input class="row form-control" label="eau" type="text" id="eau" readonly/>
-
-            <label for="levure" class="row col-form-label">Poids de levure seche (g)</label>
-            <input class="row form-control" label="levure" type="text" id="levure" readonly/>
-
-            <label for="sel" class="row col-form-label">Poids de sel (g)</label>
-            <input class="row form-control" label="sel" type="text" id="sel" readonly/>
+        <div class="form-group row">
+            <label class="col-sm-3" for="ts">Proportion de sel (%)</label>
+            <div class="col-sm-9">
+                <input class="form-control form-control-sm" id="ts" step="0.1" type="number" value="2.0"/>
+                <small class="ml-2 form-text text-muted">2% est normal, 1.8 serait plus sain.</small>
+            </div>
         </div>
 
+        <div class="form-group row">
+            <label class="col-sm-3" for="tl">Proportion de levure seche (%)</label>
+            <div class="col-sm-9">
+                <input class="form-control form-control-sm" id="tl" step="0.1" type="number" value="0.7"/>
+                <small class="ml-2 form-text text-muted">En general 1.8% de levure fraiche. Pour passer a la levure
+                    seche
+                    on divise par 2.5, soit une valeur de 0.7%</small>
+            </div>
+        </div>
+    </form>
 
-        <h2>Poolish</h2>
-        <div class="form-group container">
-            <label for="poolish_farine" class="row col-form-label">Poids de farine (g)</label>
-            <input class="row form-control" label="poolish_farine" type="text" id="poolish_farine" readonly/>
-
-            <label for="poolish_eau" class="row col-form-label">Poids d'eau (g)</label>
-            <input class="row form-control" label="poolish_eau" type="text" id="poolish_eau" readonly/>
-
-            <label for="levure" class="row col-form-label">Poids de levure seche (g)</label>
-            <input class="row form-control" label="poolish_levure" type="text" id="poolish_levure" readonly/>
+    <h2>Total des ingredients</h2>
+    <form>
+        <div class="form-group">
+            <label for="eau">Poids d'eau (g)</label>
+            <input class="form-control" id="eau" readonly type="text"/>
         </div>
 
-        <h2>Reste de la pate</h2>
-        <div class="form-group container">
-            <label for="reste_farine" class="row col-form-label">Poids de farine (g)</label>
-            <input class="row form-control" label="reste_farine" type="text" id="reste_farine" readonly/>
+        <div class="form-group">
+            <label for="levure">Poids de levure seche (g)</label>
+            <input class="form-control" id="levure" readonly type="text"/>
+        </div>
 
-            <label for="reste_eau" class="row col-form-label">Poids d'eau (g)</label>
-            <input class="row form-control" label="reste_eau" type="text" id="reste_eau" readonly/>
+        <div class="form-group">
+            <label for="sel">Poids de sel (g)</label>
+            <input class="form-control" id="sel" readonly type="text"/>
+        </div>
+    </form>
 
-            <label for="reste_levure" class="row col-form-label">Poids de levure seche (g)</label>
-            <input class="row form-control" label="reste_levure" type="text" id="reste_levure" readonly/>
+    <hr/>
 
-            <label for="reste_sel" class="row col-form-label">Poids de sel (g)</label>
-            <input class="row form-control" label="reste_sel" type="text" id="reste_sel" readonly/>
+    <h2>Poolish (Optionnel, 12~24h de repos)</h2>
+    <form>
+        <div class="form-group">
+            <label for="poolish_farine">Poids de farine (g)</label>
+            <input class="form-control" id="poolish_farine" readonly type="text"/>
+        </div>
+
+        <div class="form-group">
+            <label for="poolish_eau">Poids d'eau (g)</label>
+            <input class="form-control" id="poolish_eau" readonly type="text"/>
+        </div>
+
+        <div class="form-group">
+            <label for="levure">Poids de levure seche (g)</label>
+            <input class="form-control" id="poolish_levure" readonly type="text"/>
+        </div>
+    </form>
+
+    <h2>Poolish: Reste de la pate</h2>
+    <form>
+        <div class="form-group">
+            <label for="reste_farine">Poids de farine (g)</label>
+            <input class="form-control" id="reste_farine" readonly type="text"/>
+        </div>
+
+        <div class="form-group">
+            <label for="reste_eau">Poids d'eau (g)</label>
+            <input class="form-control" id="reste_eau" readonly type="text"/>
+        </div>
+
+        <div class="form-group">
+            <label for="reste_levure">Poids de levure seche (g)</label>
+            <input class="form-control" id="reste_levure" readonly type="text"/>
+        </div>
+
+        <div class="form-group">
+            <label for="reste_sel">Poids de sel (g)</label>
+            <input class="form-control" id="reste_sel" readonly type="text"/>
         </div>
     </form>
 </div>
+
+<script crossorigin="anonymous"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <script src="calculator.js"></script>
 </body>
 </html>

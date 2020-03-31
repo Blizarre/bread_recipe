@@ -1,10 +1,24 @@
-eau = $('#eau')
-farine = $('#farine')
-th = $('#th')
-ts = $('#ts')
-tl = $('#tl')
-sel = $('#sel')
-levure = $('#levure')
+var eau = $('#eau')
+var farine = $('#farine')
+var th = $('#th')
+var ts = $('#ts')
+var tl = $('#tl')
+var sel = $('#sel')
+var levure = $('#levure')
+
+var saved_items = {
+    "farine": farine,
+    "th": th,
+    "ts": ts,
+    "tl": tl
+}
+
+for (var key in saved_items) {
+    var stored = window.localStorage.getItem(key)
+    if (stored !== null) {
+        saved_items[key].val(stored)
+    }
+}
 
 poolish_eau = $('#poolish_eau')
 poolish_farine = $('#poolish_farine')
@@ -19,7 +33,13 @@ function read(input) {
     return parseFloat(input.val())
 }
 
+
 function update() {
+
+    for (var key in saved_items) {
+        window.localStorage.setItem(key, saved_items[key].val())
+    }
+
     eau.val(
         (read(th) * read(farine) / 100).toFixed(0)
     )
@@ -43,6 +63,16 @@ function update() {
     reste_levure.val(read(levure) - read(poolish_levure))
     reste_sel.val(read(sel))
 }
+
+
+function reset(_farine, _th, _ts, _tl) {
+    farine.val(_farine)
+    th.val(_th)
+    ts.val(_ts)
+    tl.val(_tl)
+    update()
+}
+
 
 farine.on("input", update);
 th.on("input", update);

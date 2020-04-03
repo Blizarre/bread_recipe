@@ -5,12 +5,14 @@ var ts = $('#ts')
 var tl = $('#tl')
 var sel = $('#sel')
 var levure = $('#levure')
+var notes = $("#notes")
 
 var saved_items = {
     "farine": farine,
     "th": th,
     "ts": ts,
-    "tl": tl
+    "tl": tl,
+    "notes": notes
 }
 
 for (var key in saved_items) {
@@ -70,13 +72,12 @@ function reset(_farine, _th, _ts, _tl) {
     th.val(_th)
     ts.val(_ts)
     tl.val(_tl)
+    notes.val("")
     update()
 }
 
-
-farine.on("input", update);
-th.on("input", update);
-ts.on("input", update);
-tl.on("input", update);
+for (var key in saved_items) {
+    saved_items[key].on("input", update)
+}
 
 update()

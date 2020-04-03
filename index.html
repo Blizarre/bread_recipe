@@ -10,7 +10,7 @@
 <body>
 <div class="container">
 
-    <h1>Calculateur pour pain</h1>
+    <h1 class="d-print-none">Calculateur pour pain</h1>
 
     <button class="btn btn-outline-primary my-3 d-print-none" onclick="window.print();return false;" type="button">
         Imprimer
@@ -25,6 +25,13 @@
     <button class="btn btn-outline-primary my-3 d-print-none" onclick="reset(500, 68, 2.0, 0.7)" type="button">
         Farine complete forte (T80+)
     </button>
+
+    <form>
+        <div class="form-group">
+            <label class="d-print-none" for="notes">Notes:</label>
+            <textarea class="form-control" id="notes"></textarea>
+        </div>
+    </form>
 
     <h2>Parametres</h2>
     <form>

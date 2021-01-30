@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 
 var Ingredients = ({ name, value, unit, update }) => {
-  var [id, ] = useState(() => { (Math.random() * 1000000).toFixed(2) })
+  var [id,] = useState(() => { (Math.random() * 1000000).toFixed(2) })
 
   var floatValue, strValue;
 
@@ -16,22 +16,22 @@ var Ingredients = ({ name, value, unit, update }) => {
     strValue = value
   }
 
-  const isNumber = !isNaN(floatValue)//value.toString().match(/^\d*\.?\d*$/)
+  const isNumber = !isNaN(floatValue)
 
   return (
     <Form.Group>
       <Form.Row>
-        <Col><Form.Label htmlFor={id}>{name}</Form.Label></Col>
-        <Col className="col-8">{unit ? <Form.Text size="s">({unit})</Form.Text> : ""}</Col>
-        </Form.Row>
-        <Form.Control
-          id={id} type="input"
-          readOnly={update === undefined}
-          onChange={(e) => { if (update !== undefined) { update(e.target.value) } }}
-          style={{ backgroundColor: isNumber ? "white" : "orange" }}
-          value={isNumber ? strValue : ""}
-          placeholder={"Erreur"}>
-        </Form.Control>
+        <Col className="col-7"><Form.Label htmlFor={id}>{name}</Form.Label></Col>
+        <Col className="col-2">{unit ? <Form.Text size="s">({unit})</Form.Text> : ""}</Col>
+      </Form.Row>
+      <Form.Control
+        id={id} type="input"
+        readOnly={update === undefined ? true : false}
+        onChange={(e) => { if (update !== undefined) { update(e.target.value) } }}
+        style={{ backgroundColor: isNumber ? "white" : "orange" }}
+        value={isNumber ? strValue : ""}
+        placeholder={"Erreur"}>
+      </Form.Control>
     </Form.Group>
   )
 }

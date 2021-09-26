@@ -1,5 +1,6 @@
 import React, { useReducer, useEffect } from 'react';
 import Ingredient from './components/Ingredient.js';
+import Comment from './components/Comment.js';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
@@ -10,7 +11,17 @@ const read_state = () => {
   try {
     const storedState = JSON.parse(localStorage.getItem("state"))
     const defaultCopy = Object.assign({}, defaultState)
-    return Object.assign(defaultCopy, storedState)
+
+    const queryStringOverride = new URLSearchParams(window.location.search);
+    for (const key in defaultCopy) {
+      if (queryStringOverride.has(key)) {
+        const value = queryStringOverride.get(key)
+        queryStringOverride[key] = value
+      }
+
+    }
+    const stateFromStorage = Object.assign(defaultCopy, storedState)
+    return Object.assign(stateFromStorage, queryStringOverride)
   } catch (e) {
     return defaultState
   }
@@ -60,6 +71,7 @@ var App = () => {
           <Form>
             <h2>Paramètres</h2>
             <Form.Group className="p-3">
+              <Comment update={(v) => { setState({ comment: v }) }} value={state.comment} name="Comment" />
               <Ingredient update={(v) => { setState({ flour: v }) }} value={state.flour} name="Farine" unit="g" />
               <Ingredient update={(v) => { setState({ ratioWater: v }) }} value={state.ratioWater} name="Taux d'hydratation" unit="TH %" />
               <Ingredient update={(v) => { setState({ ratioSalt: v }) }} value={state.ratioSalt} name="Proportion de Sel" unit="%" />

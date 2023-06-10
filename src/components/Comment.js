@@ -2,15 +2,15 @@ import { useState } from 'react';
 
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 
 var Comment = ({ name, value, update }) => {
   var [id,] = useState(() => { (Math.random() * 1000000).toFixed(2) })
-
   return (
     <Form.Group>
-      <Form.Row>
+      <Row>
         <Col className="col-7"><Form.Label htmlFor={id}>{name}</Form.Label></Col>
-      </Form.Row>
+      </Row>
       <Form.Control
         id={id} as="textarea"
         readOnly={update === undefined ? true : false}

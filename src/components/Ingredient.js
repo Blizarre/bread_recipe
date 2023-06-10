@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 
 var Ingredients = ({ name, value, unit, update }) => {
   var [id,] = useState(() => { (Math.random() * 1000000).toFixed(2) })
@@ -20,10 +21,10 @@ var Ingredients = ({ name, value, unit, update }) => {
 
   return (
     <Form.Group>
-      <Form.Row>
+      <Row>
         <Col className="col-7"><Form.Label htmlFor={id}>{name}</Form.Label></Col>
         <Col className="col-2">{unit ? <Form.Text size="s">({unit})</Form.Text> : ""}</Col>
-      </Form.Row>
+      </Row>
       <Form.Control
         id={id} type="input"
         readOnly={update === undefined ? true : false}

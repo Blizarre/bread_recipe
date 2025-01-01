@@ -15,7 +15,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
-  
+
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
@@ -27,7 +27,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-      
+
     runs-on: ubuntu-latest
 
     strategy:
@@ -44,12 +44,12 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build
-    
+
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v1
       with:
         # Upload entire repository
-        path: './build/'
+        path: './out/'
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v2

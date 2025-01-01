@@ -19,7 +19,7 @@ const BreadCalculator = () => {
     const formFields: FormField[] = [
         {
             id: 'flour',
-            label: 'Farine supplémentaire',
+            label: 'Farine',
             defaultValue: 1000,
             unit: 'g',
             getter: () => additionalFlour,

@@ -82,10 +82,23 @@ const BreadCalculator = () => {
         const additionalWater = desiredWater - starterWater
         const salt = (totalFlour * saltPercentage) / 100
 
+        // Calculate actual hydration rate based on total water and flour
+        const totalWater = additionalWater + starterWater
+        const actualHydration = (totalWater / totalFlour) * 100
+
+        // Calculate additional statistics
+        const actualSaltPercentage = (salt / totalFlour) * 100
+        const starterPercentage = (starter / totalFlour) * 100
+        const totalWeight = additionalFlour + additionalWater + salt + starter
+
         return {
             additionalFlour: Math.round(additionalFlour),
             additionalWater: Math.round(additionalWater),
-            salt: salt.toFixed(1)
+            salt: salt.toFixed(1),
+            hydrationRate: actualHydration.toFixed(1),
+            saltRate: actualSaltPercentage.toFixed(2),
+            starterRate: starterPercentage.toFixed(1),
+            totalWeight: Math.round(totalWeight)
         }
     }
 
@@ -108,37 +121,60 @@ const BreadCalculator = () => {
     )
 
     return (
-        <div className="max-w-2xl mx-auto space-y-6">
-            {/* Input Section */}
-            <div className="bg-white p-6 rounded shadow">
-                <h2 className="text-xl font-bold mb-4">Calculateur de Pain</h2>
-                <div className="grid grid-cols-2 gap-4">
+        <div className="max-w-4xl mx-auto p-6 space-y-6">
+            {/* Input Section - Contains all the user-adjustable parameters */}
+            <section className="bg-white p-6 rounded-lg shadow-md">
+                <h2 className="text-2xl font-bold mb-6">Calculateur de Pain</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {formFields.map(renderInputField)}
                 </div>
-            </div>
+            </section>
 
-            {/* Results Section */}
-            <div className="bg-white p-6 rounded shadow">
-                <h2 className="text-xl font-bold mb-4">Ingrédients nécessaires</h2>
-                <div className="grid grid-cols-2 gap-4">
-                    <div>
-                        <p className="text-sm">Farine</p>
-                        <p className="text-2xl">{results.additionalFlour}g</p>
+            {/* Results Section - Shows the calculated ingredient amounts */}
+            <section className="bg-white p-6 rounded-lg shadow-md">
+                <h2 className="text-2xl font-bold mb-6">Ingrédients nécessaires</h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div className="space-y-2">
+                        <p className="text-sm font-medium text-gray-600">Farine</p>
+                        <p className="text-2xl font-semibold">{results.additionalFlour}g</p>
                     </div>
-                    <div>
-                        <p className="text-sm">Eau</p>
-                        <p className="text-2xl">{results.additionalWater}g</p>
+                    <div className="space-y-2">
+                        <p className="text-sm font-medium text-gray-600">Eau</p>
+                        <p className="text-2xl font-semibold">{results.additionalWater}g</p>
                     </div>
-                    <div>
-                        <p className="text-sm">Sel</p>
-                        <p className="text-2xl">{results.salt}g</p>
+                    <div className="space-y-2">
+                        <p className="text-sm font-medium text-gray-600">Sel</p>
+                        <p className="text-2xl font-semibold">{results.salt}g</p>
                     </div>
-                    <div>
-                        <p className="text-sm">Levain</p>
-                        <p className="text-2xl">{starter}g</p>
+                    <div className="space-y-2">
+                        <p className="text-sm font-medium text-gray-600">Levain</p>
+                        <p className="text-2xl font-semibold">{starter}g</p>
                     </div>
                 </div>
-            </div>
+            </section>
+
+            {/* Statistics Section - Displays key dough characteristics */}
+            <section className="bg-white p-6 rounded-lg shadow-md">
+                <h2 className="text-2xl font-bold mb-6">Statistiques</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                        <p className="text-sm font-medium text-gray-600">Taux d'hydratation réel</p>
+                        <p className="text-2xl font-semibold">{results.hydrationRate}%</p>
+                    </div>
+                    <div className="space-y-2">
+                        <p className="text-sm font-medium text-gray-600">Taux de sel réel</p>
+                        <p className="text-2xl font-semibold">{results.saltRate}%</p>
+                    </div>
+                    <div className="space-y-2">
+                        <p className="text-sm font-medium text-gray-600">Taux de levain</p>
+                        <p className="text-2xl font-semibold">{results.starterRate}%</p>
+                    </div>
+                    <div className="space-y-2">
+                        <p className="text-sm font-medium text-gray-600">Poids total</p>
+                        <p className="text-2xl font-semibold">{results.totalWeight}g</p>
+                    </div>
+                </div>
+            </section>
         </div>
     )
 }

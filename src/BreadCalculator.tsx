@@ -4,7 +4,6 @@ type FormField = {
     id: string
     label: string
     defaultValue: number
-    unit: string
     getter: () => number
     setter: (value: number) => void
 }
@@ -19,33 +18,29 @@ const BreadCalculator = () => {
     const formFields: FormField[] = [
         {
             id: 'flour',
-            label: 'Farine',
+            label: 'Farine (g)',
             defaultValue: 1000,
-            unit: 'g',
             getter: () => additionalFlour,
             setter: setAdditionalFlour
         },
         {
             id: 'starter',
-            label: 'Levain',
+            label: 'Levain (50% eau, 50% farine, g)',
             defaultValue: 200,
-            unit: 'g',
             getter: () => starter,
             setter: setStarter
         },
         {
             id: 'water',
-            label: "Pourcentage d'eau",
+            label: "Pourcentage d'eau (%)",
             defaultValue: 75,
-            unit: '%',
             getter: () => waterPercentage,
             setter: setWaterPercentage
         },
         {
             id: 'salt',
-            label: 'Pourcentage de sel',
+            label: 'Pourcentage de sel (%)',
             defaultValue: 2,
-            unit: '%',
             getter: () => saltPercentage,
             setter: setSaltPercentage
         }
@@ -82,12 +77,7 @@ const BreadCalculator = () => {
         const additionalWater = desiredWater - starterWater
         const salt = (totalFlour * saltPercentage) / 100
 
-        // Calculate actual hydration rate based on total water and flour
-        const totalWater = additionalWater + starterWater
-        const actualHydration = (totalWater / totalFlour) * 100
-
         // Calculate additional statistics
-        const actualSaltPercentage = (salt / totalFlour) * 100
         const starterPercentage = (starter / totalFlour) * 100
         const totalWeight = additionalFlour + additionalWater + salt + starter
 
@@ -95,8 +85,8 @@ const BreadCalculator = () => {
             additionalFlour: Math.round(additionalFlour),
             additionalWater: Math.round(additionalWater),
             salt: salt.toFixed(1),
-            hydrationRate: actualHydration.toFixed(1),
-            saltRate: actualSaltPercentage.toFixed(2),
+            hydrationRate: waterPercentage.toFixed(1),
+            saltRate: saltPercentage.toFixed(2),
             starterRate: starterPercentage.toFixed(1),
             totalWeight: Math.round(totalWeight)
         }
@@ -108,7 +98,7 @@ const BreadCalculator = () => {
     const renderInputField = (field: FormField) => (
         <div key={field.id}>
             <label className="block mb-1">
-                {field.label} ({field.unit})
+                {field.label}
             </label>
             <input
                 type="number"
@@ -158,11 +148,11 @@ const BreadCalculator = () => {
                 <h2 className="text-2xl font-bold mb-6">Statistiques</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                        <p className="text-sm font-medium text-gray-600">Taux d'hydratation réel</p>
+                        <p className="text-sm font-medium text-gray-600">Taux d'hydratation</p>
                         <p className="text-2xl font-semibold">{results.hydrationRate}%</p>
                     </div>
                     <div className="space-y-2">
-                        <p className="text-sm font-medium text-gray-600">Taux de sel réel</p>
+                        <p className="text-sm font-medium text-gray-600">Taux de sel</p>
                         <p className="text-2xl font-semibold">{results.saltRate}%</p>
                     </div>
                     <div className="space-y-2">

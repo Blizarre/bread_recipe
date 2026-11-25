@@ -6,6 +6,7 @@ type NumericValue = number | null
 type FormField = {
     id: string
     label: string
+    section: 'ingredients' | 'temperature'
     defaultValue: number
     getter: () => NumericValue
     setter: (value: NumericValue) => void
@@ -17,11 +18,15 @@ const BreadCalculator = () => {
     const [starter, setStarter] = useState<NumericValue>(100)
     const [waterPercentage, setWaterPercentage] = useState<NumericValue>(68)
     const [saltPercentage, setSaltPercentage] = useState<NumericValue>(1.8)
+    const [baseTemperature, setBaseTemperature] = useState<NumericValue>(65)
+    const [flourTemperature, setFlourTemperature] = useState<NumericValue>(20)
+    const [roomTemperature, setRoomTemperature] = useState<NumericValue>(20)
 
     const formFields: FormField[] = [
         {
             id: 'flour',
             label: 'Farine (g)',
+            section: 'ingredients',
             defaultValue: 1000,
             getter: () => additionalFlour,
             setter: setAdditionalFlour
@@ -29,6 +34,7 @@ const BreadCalculator = () => {
         {
             id: 'starter',
             label: 'Levain (50% eau, 50% farine, g)',
+            section: 'ingredients',
             defaultValue: 200,
             getter: () => starter,
             setter: setStarter
@@ -36,6 +42,7 @@ const BreadCalculator = () => {
         {
             id: 'water',
             label: "Pourcentage d'eau (%)",
+            section: 'ingredients',
             defaultValue: 75,
             getter: () => waterPercentage,
             setter: setWaterPercentage
@@ -43,9 +50,34 @@ const BreadCalculator = () => {
         {
             id: 'salt',
             label: 'Pourcentage de sel (%)',
+            section: 'ingredients',
             defaultValue: 2,
             getter: () => saltPercentage,
             setter: setSaltPercentage
+        },
+        {
+            id: 'base-temperature',
+            label: 'Température de base (TB, °C)',
+            section: 'temperature',
+            defaultValue: 65,
+            getter: () => baseTemperature,
+            setter: setBaseTemperature
+        },
+        {
+            id: 'flour-temperature',
+            label: 'Température de la farine (°C)',
+            section: 'temperature',
+            defaultValue: 20,
+            getter: () => flourTemperature,
+            setter: setFlourTemperature
+        },
+        {
+            id: 'room-temperature',
+            label: 'Température ambiante (°C)',
+            section: 'temperature',
+            defaultValue: 20,
+            getter: () => roomTemperature,
+            setter: setRoomTemperature
         }
     ]
 
@@ -69,7 +101,7 @@ const BreadCalculator = () => {
             const currentValue = field.getter()
             localStorage.setItem(`bread-${field.id}`, currentValue === null ? '' : currentValue.toString())
         })
-    }, [initialized, additionalFlour, starter, waterPercentage, saltPercentage])
+    }, [initialized, additionalFlour, starter, waterPercentage, saltPercentage, baseTemperature, flourTemperature, roomTemperature])
 
     // Calculate the ingredients based on inputs
     const calculateIngredients = () => {
@@ -118,6 +150,12 @@ const BreadCalculator = () => {
 
     const results = calculateIngredients()
 
+    // The water temperature is the base temperature minus the flour and room temperatures
+    const waterTemperature =
+        baseTemperature === null || flourTemperature === null || roomTemperature === null
+            ? '-'
+            : (baseTemperature - flourTemperature - roomTemperature).toFixed(1)
+
     // A value that cannot be computed is shown as a dash, without a unit
     const withUnit = (value: string, unit: string) =>
         value === '-' ? '-' : `${value}${unit}`
@@ -147,7 +185,7 @@ const BreadCalculator = () => {
             <section className="bg-white p-6 rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold mb-6">Calculateur de Pain</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {formFields.map(renderInputField)}
+                    {formFields.filter(field => field.section === 'ingredients').map(renderInputField)}
                 </div>
             </section>
 
@@ -171,6 +209,18 @@ const BreadCalculator = () => {
                         <p className="text-sm font-medium text-gray-600">Levain</p>
                         <p className="text-2xl font-semibold">{starter === null ? '-' : `${starter}g`}</p>
                     </div>
+                </div>
+            </section>
+
+            {/* Temperature Section - Computes the water temperature from the base temperature */}
+            <section className="bg-white p-6 rounded-lg shadow-md">
+                <h2 className="text-2xl font-bold mb-6">Température de base (TB)</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {formFields.filter(field => field.section === 'temperature').map(renderInputField)}
+                </div>
+                <div className="mt-6 space-y-2">
+                    <p className="text-sm font-medium text-gray-600">Température de l'eau</p>
+                    <p className="text-2xl font-semibold">{withUnit(waterTemperature, '°C')}</p>
                 </div>
             </section>
 

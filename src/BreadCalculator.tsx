@@ -1,19 +1,22 @@
 import { useState, useEffect } from 'react'
 
+// An empty input is represented by null, so that clearing a field does not turn into 0
+type NumericValue = number | null
+
 type FormField = {
     id: string
     label: string
     defaultValue: number
-    getter: () => number
-    setter: (value: number) => void
+    getter: () => NumericValue
+    setter: (value: NumericValue) => void
 }
 
 const BreadCalculator = () => {
     const [initialized, setInitialized] = useState(false)
-    const [additionalFlour, setAdditionalFlour] = useState(750)
-    const [starter, setStarter] = useState(100)
-    const [waterPercentage, setWaterPercentage] = useState(68)
-    const [saltPercentage, setSaltPercentage] = useState(1.8)
+    const [additionalFlour, setAdditionalFlour] = useState<NumericValue>(750)
+    const [starter, setStarter] = useState<NumericValue>(100)
+    const [waterPercentage, setWaterPercentage] = useState<NumericValue>(68)
+    const [saltPercentage, setSaltPercentage] = useState<NumericValue>(1.8)
 
     const formFields: FormField[] = [
         {
@@ -50,8 +53,8 @@ const BreadCalculator = () => {
     useEffect(() => {
         formFields.forEach(field => {
             const savedValue = localStorage.getItem(`bread-${field.id}`)
-            if (savedValue) {
-                field.setter(Number(savedValue))
+            if (savedValue !== null) {
+                field.setter(savedValue === '' ? null : Number(savedValue))
             }
         })
         setInitialized(true)
@@ -64,51 +67,79 @@ const BreadCalculator = () => {
         formFields.forEach(field => {
             // Now we simply use the getter to access the current value
             const currentValue = field.getter()
-            localStorage.setItem(`bread-${field.id}`, currentValue.toString())
+            localStorage.setItem(`bread-${field.id}`, currentValue === null ? '' : currentValue.toString())
         })
     }, [initialized, additionalFlour, starter, waterPercentage, saltPercentage])
 
     // Calculate the ingredients based on inputs
     const calculateIngredients = () => {
-        const starterFlour = starter / 2
-        const starterWater = starter / 2
-        const totalFlour = additionalFlour + starterFlour
-        const desiredWater = (totalFlour * waterPercentage) / 100
-        const additionalWater = desiredWater - starterWater
-        const salt = (totalFlour * saltPercentage) / 100
+        const starterFlour = starter === null ? null : starter / 2
+        const starterWater = starter === null ? null : starter / 2
+        const totalFlour =
+            additionalFlour === null || starterFlour === null
+                ? null
+                : additionalFlour + starterFlour
+        const desiredWater =
+            totalFlour === null || waterPercentage === null
+                ? null
+                : (totalFlour * waterPercentage) / 100
+        const additionalWater =
+            desiredWater === null || starterWater === null
+                ? null
+                : desiredWater - starterWater
+        const salt =
+            totalFlour === null || saltPercentage === null
+                ? null
+                : (totalFlour * saltPercentage) / 100
 
         // Calculate additional statistics
-        const starterPercentage = (starter / totalFlour) * 100
-        const totalWeight = additionalFlour + additionalWater + salt + starter
+        const starterPercentage =
+            starter === null || totalFlour === null || totalFlour === 0
+                ? null
+                : (starter / totalFlour) * 100
+        const totalWeight =
+            additionalFlour === null ||
+            additionalWater === null ||
+            salt === null ||
+            starter === null
+                ? null
+                : additionalFlour + additionalWater + salt + starter
 
         return {
-            additionalFlour: Math.round(additionalFlour),
-            additionalWater: Math.round(additionalWater),
-            salt: salt.toFixed(1),
-            hydrationRate: waterPercentage.toFixed(1),
-            saltRate: saltPercentage.toFixed(2),
-            starterRate: starterPercentage.toFixed(1),
-            totalWeight: Math.round(totalWeight)
+            additionalFlour: additionalFlour === null ? '-' : Math.round(additionalFlour).toString(),
+            additionalWater: additionalWater === null ? '-' : Math.round(additionalWater).toString(),
+            salt: salt === null ? '-' : salt.toFixed(1),
+            hydrationRate: waterPercentage === null ? '-' : waterPercentage.toFixed(1),
+            saltRate: saltPercentage === null ? '-' : saltPercentage.toFixed(2),
+            starterRate: starterPercentage === null ? '-' : starterPercentage.toFixed(1),
+            totalWeight: totalWeight === null ? '-' : Math.round(totalWeight).toString()
         }
     }
 
     const results = calculateIngredients()
 
+    // A value that cannot be computed is shown as a dash, without a unit
+    const withUnit = (value: string, unit: string) =>
+        value === '-' ? '-' : `${value}${unit}`
+
     // Render the input fields
-    const renderInputField = (field: FormField) => (
-        <div key={field.id}>
-            <label className="block mb-1">
-                {field.label}
-            </label>
-            <input
-                type="number"
-                value={field.getter()}
-                onChange={(e) => field.setter(Number(e.target.value))}
-                min="0"
-                className="w-full p-2 border rounded"
-            />
-        </div>
-    )
+    const renderInputField = (field: FormField) => {
+        const value = field.getter()
+        return (
+            <div key={field.id}>
+                <label className="block mb-1">
+                    {field.label}
+                </label>
+                <input
+                    type="number"
+                    value={value === null ? '' : value}
+                    onChange={(e) => field.setter(e.target.value === '' ? null : Number(e.target.value))}
+                    min="0"
+                    className="w-full p-2 border rounded"
+                />
+            </div>
+        )
+    }
 
     return (
         <div className="max-w-4xl mx-auto p-6 space-y-6">
@@ -126,19 +157,19 @@ const BreadCalculator = () => {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                     <div className="space-y-2">
                         <p className="text-sm font-medium text-gray-600">Farine</p>
-                        <p className="text-2xl font-semibold">{results.additionalFlour}g</p>
+                        <p className="text-2xl font-semibold">{withUnit(results.additionalFlour, 'g')}</p>
                     </div>
                     <div className="space-y-2">
                         <p className="text-sm font-medium text-gray-600">Eau</p>
-                        <p className="text-2xl font-semibold">{results.additionalWater}g</p>
+                        <p className="text-2xl font-semibold">{withUnit(results.additionalWater, 'g')}</p>
                     </div>
                     <div className="space-y-2">
                         <p className="text-sm font-medium text-gray-600">Sel</p>
-                        <p className="text-2xl font-semibold">{results.salt}g</p>
+                        <p className="text-2xl font-semibold">{withUnit(results.salt, 'g')}</p>
                     </div>
                     <div className="space-y-2">
                         <p className="text-sm font-medium text-gray-600">Levain</p>
-                        <p className="text-2xl font-semibold">{starter}g</p>
+                        <p className="text-2xl font-semibold">{starter === null ? '-' : `${starter}g`}</p>
                     </div>
                 </div>
             </section>
@@ -149,19 +180,19 @@ const BreadCalculator = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                         <p className="text-sm font-medium text-gray-600">Taux d'hydratation</p>
-                        <p className="text-2xl font-semibold">{results.hydrationRate}%</p>
+                        <p className="text-2xl font-semibold">{withUnit(results.hydrationRate, '%')}</p>
                     </div>
                     <div className="space-y-2">
                         <p className="text-sm font-medium text-gray-600">Taux de sel</p>
-                        <p className="text-2xl font-semibold">{results.saltRate}%</p>
+                        <p className="text-2xl font-semibold">{withUnit(results.saltRate, '%')}</p>
                     </div>
                     <div className="space-y-2">
                         <p className="text-sm font-medium text-gray-600">Taux de levain</p>
-                        <p className="text-2xl font-semibold">{results.starterRate}%</p>
+                        <p className="text-2xl font-semibold">{withUnit(results.starterRate, '%')}</p>
                     </div>
                     <div className="space-y-2">
                         <p className="text-sm font-medium text-gray-600">Poids total</p>
-                        <p className="text-2xl font-semibold">{results.totalWeight}g</p>
+                        <p className="text-2xl font-semibold">{withUnit(results.totalWeight, 'g')}</p>
                     </div>
                 </div>
             </section>
